@@ -2,6 +2,7 @@ const Comment = require("../models/Comment");
 const Post = require("../models/Post");
 const Reaction = require("../models/Reaction");
 const User = require("../models/User");
+const router = require("../routes/Post");
 
 exports.createPost = async(req,res) => {
 
@@ -315,4 +316,40 @@ exports.dislike = async (req, res) => {
             message: "Error while Liking"
         });
     }
+}
+
+exports.getAllUserPosts = async(req,res) => {
+
+    try{
+
+        const {emailId} = req.params;
+        if(!emailId){
+            return res.status(400).json({
+                success : false,
+                message : "Missing EmailId"
+            })
+        }
+
+        const posts = await User.findOne({email : emailId}).select("name bio post").populate("post").exec();
+        if(!posts){
+            return res.status(404).json({
+                succes : false,
+                message : "User Not Found"
+            });
+        }
+
+        return res.status(200).json({
+            success : true,
+            posts
+        });
+
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message : "Error while fetching User Requests"
+        });
+    }
+
 }
