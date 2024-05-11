@@ -14,10 +14,7 @@ app.use(fileupload({
 const PORT = process.env.PORT || 4000;
 
 const database = require("./config/database");
-const cloudinary = require("./config/cloudinary");
-
 database.connect();
-cloudinary.cloudinaryConnect();
 
 const Auth = require("./routes/Auth");
 const Post = require("./routes/Post");
