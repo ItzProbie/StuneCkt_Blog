@@ -46,6 +46,7 @@ const userSchema = new mongoose.Schema({
     reaction: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "Reaction",
+        default : null
     },
     resetPasswordToken: {
         type: String

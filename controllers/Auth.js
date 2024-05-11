@@ -100,8 +100,6 @@ exports.signUp = async(req,res) => {
 
         const hashedpassword = await bcrypt.hash(password , 10);
 
-        
-
         const user = await User.create({
             name , email , password : hashedpassword , bio , 
             image : `https://api.dicebear.com/5.x/initials/svg?seed=${name}`
