@@ -352,4 +352,32 @@ exports.getAllUserPosts = async(req,res) => {
         });
     }
 
+};
+
+exports.getPostByPage = async(req,res) => {
+
+    try{
+
+        const postsPerPage = parseInt(req.body.postsPerPage || 5);
+        const currentPage = parseInt(req.body.currentPage || 1);
+
+        const posts = await Post.find()
+            .sort({ createdAt: -1 })
+            .skip((currentPage - 1) * postsPerPage)
+            .limit(postsPerPage);
+
+        return res.status(200).json({
+            success : true,
+            posts
+        });
+
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message : "Error while fetching Posts Bypage"
+        });
+    }
+
 }
