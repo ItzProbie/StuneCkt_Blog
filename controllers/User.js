@@ -1,5 +1,6 @@
 const mongoose = require("mongoose");
 const User = require("../models/User");
+const { escape } = require("validator");
 
 exports.follow = async(req,res) => {
 
@@ -164,4 +165,92 @@ exports.getAllFollowing = async(req,res) => {
             message  : "Error while fetching following"
         });
     }
+}
+
+exports.getUserById = async(req,res) => {
+
+    try{
+
+        const {userId} = req.params;
+        if(!userId){
+            return res.status(400).json({
+                success : false,
+                message : "Missing userId"
+            });
+        }
+
+        const user = await User.findById(userId).select("name email bio image follower following post")
+        .populate("post")
+        .populate({
+            path : "follower",
+            model : "User",
+            select : "name email image bio"
+        })
+        .populate({
+            path : "following",
+            model : "User",
+            select : "name email image bio"
+        }).exec();
+
+        if(!user){
+            return res.status(404).json({
+                success : false,
+                message : "User Not Found"
+            });
+        }
+
+        return res.status(200).json({
+            success : true,
+            user
+        });
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message  : "Error while fetching User"
+        });
+    }
+
+}
+
+exports.updateUserInfo = async(req,res) => {
+
+    try{
+
+        let {name , bio } = req.body;
+        if(!name && !bio){
+            return res.status(400).json({
+                success : false,
+                message : "Missing Data"
+            });
+        }
+
+        const user = await User.findById(req.user.id);
+        if(!user){
+            return res.status(404).json({
+                success : false,
+                message : "Missing User"
+            });
+        }
+
+        user.name = name || user.name;
+        user.bio = bio || user.bio;
+
+        const updatedUser = await user.save();
+        updatedUser.password = undefined;
+
+        return res.status(200).json({
+            success : true,
+            updatedUser
+        });
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message  : "Error while Updating User Info"
+        });
+    }
+
 }
