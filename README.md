@@ -1,12 +1,19 @@
 To run this program
 1- Clone this repo
 2- Add the env variables
+
     PORT = 
+
     MONGODB_URL = 
-    MAIL_USER = 
+    
+    MAIL_USER =
+    
     MAIL_HOST = 
+    
     MAIL_PASS = 
+    
     JWT_SECRET =
+    
 3- instal depndencies using npm i
 4- use npm run dev to run the code
 
