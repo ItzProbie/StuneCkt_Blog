@@ -13,6 +13,13 @@ exports.follow = async(req,res) => {
             });
         }
 
+        if(req.user.id === userId){
+            return res.status(409).json({
+                success : false,
+                message : "Invalid Request"
+            })
+        }
+
         const user1 = await User.findById(userId);
         const user2 = await User.findById(req.user.id);
         if(!user1 || !user2){
@@ -97,4 +104,64 @@ exports.unFollow = async(req,res) => {
         });
     }
 
+}
+
+exports.getAllFollowers = async(req,res) => {
+    try{
+
+        const user = await User.findById(req.user.id).select("follower").populate({
+            path : "follower",
+            model : "User",
+            select : "name email image bio"
+        }).exec();
+
+        if(!user){
+            return res.statsu(404).json({
+                success : false,
+                message : "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            success : false,
+            user
+        });
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message  : "Error while fetching followers"
+        });
+    }
+}
+
+exports.getAllFollowing = async(req,res) => {
+    try{
+
+        const user = await User.findById(req.user.id).select("following").populate({
+            path : "following",
+            model : "User",
+            select : "name email image bio"
+        }).exec();
+
+        if(!user){
+            return res.statsu(404).json({
+                success : false,
+                message : "User not found"
+            });
+        }
+
+        return res.status(200).json({
+            success : false,
+            user
+        });
+
+    }catch(err){
+        console.log(err);
+        return res.status(500).json({
+            success : false,
+            message  : "Error while fetching following"
+        });
+    }
 }

@@ -139,8 +139,6 @@ exports.login = async(req,res) => {
         }
 
         const user = await User.findOne({ email })
-        .populate('follower')
-        .populate('following')
         .populate('post')
         .populate("reaction")
         .exec();
