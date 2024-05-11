@@ -1,5 +1,7 @@
 To run this program
+
 1- Clone this repo
+
 2- Add the env variables
 
     PORT = 
@@ -14,8 +16,9 @@ To run this program
     
     JWT_SECRET =
     
-3- instal depndencies using npm i
-4- use npm run dev to run the code
+3- install depndencies using "npm i"
+
+4- use "npm run dev" to run the code
 
 To test this i have hosted this on vercel
 https://stune-ckt-blog.vercel.app/
